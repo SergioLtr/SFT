@@ -81,11 +81,15 @@ if ( ! function_exists('is_really_writable'))
 		// write a file then read it.  Bah...
 		if (is_dir($file))
 		{
-			$file = rtrim($file, '/').'/'.md5(mt_rand(1,100).mt_rand(1,100));
+			$options = [
+    			'cost' => 13,
+			];
+
+			$file = rtrim($file, '/').'/'.password_hash( (mt_rand(1,100).mt_rand(1,100)), PASSWORD_BCRYPT, $options);
 
 			if (($fp = fopen($file, FOPEN_WRITE_CREATE)) === false)
 			{
-				return false;
+				return fal
 			}
 
 			fclose($fp);

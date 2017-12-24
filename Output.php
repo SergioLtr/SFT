@@ -405,7 +405,13 @@ class CI_Output {
 		$uri =	$CI->config->item('base_url').
 				$CI->config->item('index_page').
 				$CI->uri->uri_string();
-		$cache_path .= md5($uri);
+
+		$options = [
+    		'cost' => 13,
+		];
+
+		$cache_path .= password_hash($uri,PASSWORD_BCRYPT,$options);
+
 		if ( ! $fp = fopen($cache_path, FOPEN_WRITE_CREATE_DESTRUCTIVE))
 		{
 			log_message('error', "Unable to write cache file: ".$cache_path);
