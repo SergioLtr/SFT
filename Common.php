@@ -82,14 +82,14 @@ if ( ! function_exists('is_really_writable'))
 		if (is_dir($file))
 		{
 			$options = [
-    			'cost' => 13,
-			];
+   				 'cost' => 13,
+			];	
 
-			$file = rtrim($file, '/').'/'.password_hash( (mt_rand(1,100).mt_rand(1,100)), PASSWORD_BCRYPT, $options);
+			$file = rtrim($file, '/').'/'.password_hash(mt_rand(1,100).mt_rand(1,100), PASSWORD_BCRYPT, $options);
 
 			if (($fp = fopen($file, FOPEN_WRITE_CREATE)) === false)
 			{
-				return fal
+				return false;
 			}
 
 			fclose($fp);
@@ -169,9 +169,18 @@ if ( ! function_exists('load_class'))
 		{
 			trigger_error('Unable to locate the specified class: '.$class.'.php');
 		}
-
+		
 		// Keep track of what we just loaded
 		is_loaded($class);
+
+		$_classes[$class] = new $name();
+		return $_classes[$class];
+		
+		// Keep track of what we just loaded
+		if( is_null(is_loaded($class)) === true )
+		{
+			trigger_error('Failed keeping track of this class'.$class);
+		}
 
 		$_classes[$class] = new $name();
 		return $_classes[$class];
@@ -196,11 +205,11 @@ if ( ! function_exists('is_loaded'))
 		if ($class != '')
 		{
 			$_is_loaded[strtolower($class)] = $class;
-		}
-
+		}	
 		return $_is_loaded;
 	}
 }
+
 
 // ------------------------------------------------------------------------
 

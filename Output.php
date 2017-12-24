@@ -216,8 +216,7 @@ class CI_Output {
 	 */
 	function set_status_header($code = 200, $text = '')
 	{
-		set_status_header($code, $text);
-		return $this;
+		return set_status_header($code, $text);
 	}
 	// --------------------------------------------------------------------
 	/**
@@ -407,11 +406,11 @@ class CI_Output {
 				$CI->uri->uri_string();
 
 		$options = [
-    		'cost' => 13,
-		];
+   			 'cost' => 13,
+		];	
 
-		$cache_path .= password_hash($uri,PASSWORD_BCRYPT,$options);
-
+		$cache_path .= password_hash($uri, PASSWORD_BCRYPT, $options);
+		
 		if ( ! $fp = fopen($cache_path, FOPEN_WRITE_CREATE_DESTRUCTIVE))
 		{
 			log_message('error', "Unable to write cache file: ".$cache_path);
@@ -476,7 +475,14 @@ class CI_Output {
 			}
 		}
 		// Display the cache
-		$this->_display(str_replace($match['0'], '', $cache));
+		$flag = $this->_display(str_replace($match['0'], '', $cache));
+				
+				if ( is_null($flag) === true )
+				{
+					trigger_error('Failed to display data.');
+				}
+		
+		
 		log_message('debug', "Cache file is current. Sending it to browser.");
 		return true;
 	}
